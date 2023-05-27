@@ -1,0 +1,123 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: base-api-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: base-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7000
+      nodePort: 30070
+  type: NodePort
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: buyer-api-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: buyer-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7002
+      nodePort: 30072
+  type: NodePort
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: seller-api-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: seller-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7003
+      nodePort: 30073
+  type: NodePort
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: manager-api-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: manager-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7004
+      nodePort: 30074
+  type: NodePort
+
+
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    elastic-app: elasticsearch-service
+  name: elasticsearch-service
+  namespace: ns-elasticsearch
+spec:
+  ports:
+    - port: 9200
+      targetPort: 9200
+      nodePort: 32000
+  selector:
+    elastic-app: elasticsearch
+  type: NodePort
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    elastic-app: elasticsearch-service
+  name: elasticsearch-api-service
+  namespace: ns-elasticsearch
+spec:
+  ports:
+    - port: 9300
+      targetPort: 9300
+      nodePort: 32100
+  selector:
+    elastic-app: elasticsearch
+  type: NodePort
+
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: xxl-job-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: xxl-job
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080      
+      nodePort: 30080
+  type: NodePort
+
+
+  
+

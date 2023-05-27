@@ -1,0 +1,41 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: config-server
+  namespace: ns-javashop  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-config  
+  template:
+    metadata:
+      labels:
+        app: app-config
+    spec:
+      nodeSelector:
+        api: enable      
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/javashop7-1/config-server:7.0.5
+        name: config-server
+        ports:
+          - containerPort: 8888
+      imagePullSecrets:
+      - name: aliyun-secret
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: config-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: app-config
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 8888
+      nodePort: 30008
+  type: NodePort

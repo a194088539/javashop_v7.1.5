@@ -1,0 +1,112 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: config-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: app-config
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 8888
+  type: ClusterIP
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: buyer-api-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: buyer-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7002
+  type: ClusterIP
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: seller-api-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: seller-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7003
+  type: ClusterIP
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: manager-api-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: manager-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7004
+  type: ClusterIP
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    elastic-app: elasticsearch-service
+  name: elasticsearch-service
+  namespace: ns-elasticsearch
+spec:
+  ports:
+    - port: 9200
+      targetPort: 9200
+  selector:
+    elastic-app: elasticsearch
+  type: ClusterIP
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    elastic-app: elasticsearch-service
+  name: elasticsearch-api-service
+  namespace: ns-elasticsearch
+spec:
+  ports:
+    - port: 9300
+      targetPort: 9300
+  selector:
+    elastic-app: elasticsearch
+  type: ClusterIP
+
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: xxl-job-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: xxl-job
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080      
+  type: ClusterIP
+
+
+

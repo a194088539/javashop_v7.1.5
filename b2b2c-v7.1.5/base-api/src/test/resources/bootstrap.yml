@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: base-api
+  cloud:
+    config:
+      uri: http://localhost:8888
+      label: master
+      profile: test
+server:
+  port: 7000

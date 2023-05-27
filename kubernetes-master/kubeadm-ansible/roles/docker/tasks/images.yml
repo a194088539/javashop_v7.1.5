@@ -1,0 +1,100 @@
+---
+- name: Instal lepel
+  yum:
+    name: "epel-release"
+    state: present        
+- name: Instal python-pkg-resources
+  yum:
+    name: http://www.javamall.com.cn/docker/python-pkg-resources-19.6.2-1.mga6.noarch.rpm
+    state: present
+    skip_broken: yes
+- name: Instal python-pip
+  yum:
+    name: http://www.javamall.com.cn/docker/python-pip-8.0.2-6.mga6.noarch.rpm
+    state: present
+    skip_broken: yes 
+- name: Install docker py
+  pip:
+    name: ["docker-py"]
+    state: present 
+  
+- name: pull flannel:v0.11.0-amd64
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/flannel:v0.11.0-amd64
+- name: tag flannel:v0.11.0-amd64
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/flannel:v0.11.0-amd64
+    repository: quay.io/coreos/flannel:v0.11.0-amd64
+    pull: no   
+
+- name: pull javashop-k8s-images/kubernetes-dashboard-amd64:v1.10.1
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/kubernetes-dashboard-amd64:v1.10.1
+- name: tag kubernetes-dashboard-amd64:v1.10.1
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/kubernetes-dashboard-amd64:v1.10.1
+    repository: k8s.gcr.io/kubernetes-dashboard-amd64:v1.10.1
+    pull: no 
+
+- name: pull javashop-k8s-images/kube-proxy:v1.13.0
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/kube-proxy:v1.13.0
+- name: tag javashop-k8s-images/kube-proxy:v1.13.0
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/kube-proxy:v1.13.0
+    repository: k8s.gcr.io/kube-proxy:v1.13.0
+    pull: no    
+
+- name: pull javashop-k8s-images/kube-controller-manager:v1.13.0
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/kube-controller-manager:v1.13.0
+- name: tag javashop-k8s-images/kube-controller-manager:v1.13.0
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/kube-controller-manager:v1.13.0
+    repository: k8s.gcr.io/kube-controller-manager:v1.13.0
+    pull: no    
+
+- name: pull javashop-k8s-images/kube-apiserver:v1.13.0
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/kube-apiserver:v1.13.0
+- name: tag javashop-k8s-images/kube-apiserver:v1.13.0
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/kube-apiserver:v1.13.0
+    repository: k8s.gcr.io/kube-apiserver:v1.13.0
+    pull: no    
+
+- name: pull javashop-k8s-images/kube-scheduler:v1.13.0
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/kube-scheduler:v1.13.0
+- name: tag javashop-k8s-images/kube-scheduler:v1.13.0
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/kube-scheduler:v1.13.0
+    repository:  k8s.gcr.io/kube-scheduler:v1.13.0
+    pull: no    
+
+- name: pull  registry.cn-beijing.aliyuncs.com/javashop-k8s-images/etcd:3.2.24
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/etcd:3.2.24
+- name: tag  registry.cn-beijing.aliyuncs.com/javashop-k8s-images/etcd:3.2.24
+  docker_image:
+    name:  registry.cn-beijing.aliyuncs.com/javashop-k8s-images/etcd:3.2.24
+    repository:  k8s.gcr.io/etcd:3.2.24
+    pull: no    
+
+- name: pull javashop-k8s-images/coredns:1.2.6
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/coredns:1.2.6
+- name: tag  registry.cn-beijing.aliyuncs.com/javashop-k8s-images/coredns:1.2.6
+  docker_image:
+    name:  registry.cn-beijing.aliyuncs.com/javashop-k8s-images/coredns:1.2.6
+    repository:  k8s.gcr.io/coredns:1.2.6
+    pull: no    
+
+- name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/pause:3.1
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/pause:3.1
+- name: tag javashop-k8s-images/pause:3.1
+  docker_image:
+    name: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/pause:3.1
+    repository: k8s.gcr.io/pause:3.1
+    pull: no    

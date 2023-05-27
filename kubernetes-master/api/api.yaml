@@ -1,0 +1,281 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: base-api
+  namespace: ns-javashop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: base-api  
+  template:
+    metadata:
+      labels:
+        app: base-api
+    spec:
+      nodeSelector:
+        api: enable 
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/javashop7-1/base-api:7.0.5
+        name: base-api-container
+        ports:
+          - containerPort: 7000
+      imagePullSecrets:
+      - name: aliyun-secret
+
+---
+
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: buyer-api
+  namespace: ns-javashop  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buyer-api  
+  template:
+    metadata:
+      labels:
+        app: buyer-api
+    spec:
+      nodeSelector:
+        api: enable    
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/javashop7-1/buyer-api:7.0.5
+        name: buyer-api-container
+        ports:
+          - containerPort: 7002
+      imagePullSecrets:
+      - name: aliyun-secret
+
+---
+
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: seller-api
+  namespace: ns-javashop  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seller-api  
+  template:
+    metadata:
+      labels:
+        app: seller-api
+    spec:
+      nodeSelector:
+        api: enable    
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/javashop7-1/seller-api:7.0.5
+        name: seller-api-container
+        ports:
+          - containerPort: 7003
+      imagePullSecrets:
+      - name: aliyun-secret
+
+---
+
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: manager-api
+  namespace: ns-javashop  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: manager-api  
+  template:
+    metadata:
+      labels:
+        app: manager-api
+    spec:
+      nodeSelector:
+        api: enable   
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/javashop7-1/manager-api:7.0.5
+        name: manager-api-container
+        ports:
+          - containerPort: 7004
+      imagePullSecrets:
+      - name: aliyun-secret
+
+---
+
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: consumer
+  namespace: ns-javashop  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consumer
+  template:
+    metadata:
+      labels:
+        app: consumer
+    spec:
+      nodeSelector:
+        api: enable   
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/javashop7-1/consumer:7.0.5
+        name: manager-api-container
+        ports:
+          - containerPort: 6001
+      imagePullSecrets:
+      - name: aliyun-secret
+
+
+---
+
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: xxl-job
+  namespace: ns-javashop  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  xxl-job
+  template:
+    metadata:
+      labels:
+        app:  xxl-job
+    spec:
+      nodeSelector:
+        api: enable   
+      containers:
+      - image: xuxueli/xxl-job-admin:2.0.0
+        name:  xxl-job-container
+        ports:
+          - containerPort: 8080
+        env: #指定容器中的环境变量  
+        - name: PARAMS #变量的名字  
+          value: "--spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl-job?Unicode=true&characterEncoding=UTF-8 --spring.datasource.username=root --spring.datasource.password=123456"
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: base-api-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: base-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7000
+      nodePort: 30070
+  type: NodePort
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: buyer-api-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: buyer-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7002
+      nodePort: 30072
+  type: NodePort
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: seller-api-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: seller-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7003
+      nodePort: 30073
+  type: NodePort
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: manager-api-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: manager-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7004
+      nodePort: 30074
+  type: NodePort
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: consumer-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: consumer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 6001
+
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: consumer-xxljob-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: consumer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 6999
+
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: xxl-job-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: xxl-job
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080      
+      nodePort: 30080
+  type: NodePort
+
+
+

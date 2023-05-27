@@ -1,0 +1,42 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: data-install
+  namespace: ns-javashop
+  labels:
+    app: data-install     
+spec:
+  selector:
+    matchLabels:
+      app: data-install
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template: # create pods using pod definition in this template
+    metadata:
+      # unlike pod-data-install.yaml, the name is not included in the meta data as a unique name is
+      # generated from the deployment name
+      labels:
+        app: data-install     
+    spec:
+      containers:
+        - name: data-install
+          image: registry.cn-beijing.aliyuncs.com/javashop-k8s-images/deploy:7.1.4
+          ports:
+          - containerPort: 7005
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: data-install-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: data-install
+  ports:
+  - name: http
+    protocol: TCP
+    port: 7005
+    targetPort: 7005
+    nodePort: 30075
+  type: NodePort

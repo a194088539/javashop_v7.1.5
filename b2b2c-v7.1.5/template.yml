@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: ${service_name}
+  cloud:
+    config:
+      uri: http://config-service:8888
+      profile: prod
+      label: demo_site
+
+
+server:
+  port: ${service_port}
+
+# 如果需要加虚拟目录打开此段
+#  servlet:
+#    context-path: /${service_name}/

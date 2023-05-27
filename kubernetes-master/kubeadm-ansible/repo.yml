@@ -1,0 +1,20 @@
+- hosts: master
+  tasks:
+    
+    - name: Add   repo
+      when: ansible_os_family == "RedHat"
+      get_url:
+        url:  http://mirrors.aliyun.com/repo/Centos-7.repo
+        dest: /etc/yum.repos.d/Centos-7.repo
+      become: yes
+
+    - name: Enable  repo
+      when: ansible_os_family == "RedHat"
+      ini_file:
+        dest: /etc/yum.repos.d/Centos-7.repo
+        section: 'docker-ce-edge'
+        option: enabled
+        value: 0
+      become: yes
+     
+ 

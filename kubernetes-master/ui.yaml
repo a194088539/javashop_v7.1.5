@@ -1,0 +1,222 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: buyer-pc-ui
+  namespace: ns-javashop  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buyer-pc-ui
+  template:
+    metadata:
+      labels:
+        app: buyer-pc-ui
+    spec:
+      nodeSelector:
+        ui: enable      
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/javashop7-1/buyer-pc:7.0.1
+        name: buyer-pc-ui
+        ports:
+          - containerPort: 3000
+      imagePullSecrets:
+      - name: aliyun-secret
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: buyer-wap-ui
+  namespace: ns-javashop  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: buyer-wap-ui
+  template:
+    metadata:
+      labels:
+        app: buyer-wap-ui
+    spec:
+      nodeSelector:
+        ui: enable      
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/javashop7-1/buyer-wap:7.0.0
+        name: buyer-wap-ui
+        ports:
+          - containerPort: 3001
+      imagePullSecrets:
+      - name: aliyun-secret
+
+---
+
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: seller-ui
+  namespace: ns-javashop  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seller-ui
+  template:
+    metadata:
+      labels:
+        app: seller-ui
+    spec:
+      nodeSelector:
+        ui: enable      
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/javashop7-1/manager-seller:7.0.2
+        name: seller-ui
+        ports:
+          - containerPort: 80
+      imagePullSecrets:
+      - name: aliyun-secret
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: admin-ui
+  namespace: ns-javashop  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-ui
+  template:
+    metadata:
+      labels:
+        app: admin-ui
+    spec:
+      nodeSelector:
+        ui: enable      
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/javashop7-1/manager-admin:7.0.1
+        name: admin-ui
+        ports:
+          - containerPort: 80
+      imagePullSecrets:
+      - name: aliyun-secret
+
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: static-ui
+  namespace: ns-javashop  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: static-ui
+  template:
+    metadata:
+      labels:
+        app: static-ui
+    spec:
+      nodeSelector:
+        ui: enable      
+      containers:
+      - image: registry.cn-beijing.aliyuncs.com/javashop7-1/openresty:1.0
+        name: static-ui
+        ports:
+          - containerPort: 80
+          - containerPort: 81
+      imagePullSecrets:
+      - name: aliyun-secret
+
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: buyer-pc-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: buyer-pc-ui
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: ClusterIP
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: buyer-wap-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: buyer-wap-ui
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3001
+  type: ClusterIP
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: seller-ui-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: seller-ui
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: admin-ui-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: admin-ui
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: static-ui-service
+  namespace: ns-javashop  
+spec:
+  selector:
+    app: static-ui
+  ports:
+    - name: pc
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: wap
+      protocol: TCP
+      port: 81
+      targetPort: 81
+  type: ClusterIP
+

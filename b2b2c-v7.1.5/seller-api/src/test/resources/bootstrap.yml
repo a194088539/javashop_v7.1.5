@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: seller-api
+  cloud:
+    config:
+      uri: http://localhost:8888
+      lable: master
+      profile: test
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+server:
+  port: 7003
